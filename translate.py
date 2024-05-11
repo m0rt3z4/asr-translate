@@ -1,14 +1,14 @@
-# translate.py
-
 from argostranslate import package, translate
+# import os
+from dotenv import load_dotenv
 
-from_code = "en"
-to_code = "fa"
-
-# translatedText = translate.translate("that horse is young.", from_code, to_code)
-# print(translatedText)
+load_dotenv()
 
 def translate_english_to_persian(text):
+    # Check model instalization
+    # if not package.is_installed(from_code="en", to_code="fa"):
+    #     model_path = os.getenv('ARGOS_MODEL_PATH')
+    #     package.install_from_path(model_path)
     translatedText = translate.translate(text, "en", "fa")
     return translatedText
 

@@ -1,12 +1,10 @@
-# main.py
-
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel
-import shutil
+import aiofiles
 import os
 
-from translate import translate_english_to_persian
-from transcription_module import transcribe_and_translate  # Import your transcription function
+from transcription_module import transcribe_and_translate
 
 app = FastAPI()
 
@@ -19,22 +17,18 @@ async def translate_audio(file: UploadFile = File(...)):
     if file.content_type != 'audio/wav':
         raise HTTPException(status_code=400, detail="Only WAV files are supported.")
 
+    temp_file_path = f"{file.filename}_temp"
     try:
-        # Save temporary audio file
-        temp_file_path = f"temp/temp_{file.filename}"
-        with open(temp_file_path, 'wb') as buffer:
-            shutil.copyfileobj(file.file, buffer)
+        async with aiofiles.open(temp_file_path, 'wb') as buffer:
+            await buffer.write(await file.read())
 
-        # Transcribe and translate the audio file
-        transcription, translation = transcribe_and_translate(temp_file_path)
-
-        # Clean up the temporary file
-        os.remove(temp_file_path)
+        transcription, translation = await run_in_threadpool(
+            transcribe_and_translate, temp_file_path
+        )
 
         return TranslationResult(transcription=transcription, translation=translation)
-
     except Exception as e:
-        # Clean up in case of failure
-        if os.path.exists(temp_file_path):
-            os.remove(temp_file_path)
         raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        if os.path.exists(temp_file_path):
+            await run_in_threadpool(os.remove, temp_file_path)

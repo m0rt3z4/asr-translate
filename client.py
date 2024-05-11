@@ -22,7 +22,7 @@ def upload_audio_and_get_translation(url, file_path):
 api_url = 'http://127.0.0.1:8000/translate/'
 
 # Path to the audio file you want to upload
-audio_file_path = 'samples/sample3.wav'
+audio_file_path = 'samples/sample2.wav'
 
 # Call the function to upload the file and get translation
 upload_audio_and_get_translation(api_url, audio_file_path)
