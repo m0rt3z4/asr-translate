@@ -1,8 +1,7 @@
 import wave
-import sys
 import json
-from translate import translate_english_to_persian
 from vosk import Model, KaldiRecognizer, SetLogLevel
+from argostranslate import  translate
 import os
 from dotenv import load_dotenv
 
@@ -37,3 +36,7 @@ def transcribe_and_translate(audio_input):
     transcription = " ".join(transcription_list)
     translation = translate_english_to_persian(transcription)
     return transcription, translation
+
+def translate_english_to_persian(text):
+    translatedText = translate.translate(text, "en", "fa")
+    return translatedText
