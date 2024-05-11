@@ -1,3 +1,5 @@
+# translate.py
+
 from argostranslate import package, translate
 
 from_code = "en"
@@ -9,3 +11,4 @@ to_code = "fa"
 def translate_english_to_persian(text):
     translatedText = translate.translate(text, "en", "fa")
     return translatedText
+

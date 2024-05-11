@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# transcription_module.py
 
 import wave
 import sys

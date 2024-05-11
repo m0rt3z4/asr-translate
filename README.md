@@ -1,1 +1,2 @@
-# asr-translate
+# Automatic Speech Recognition + Tranlsate + FastAPI
+
